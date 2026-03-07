@@ -1,0 +1,42 @@
+{
+  "name": "ats-automation-framework",
+  "version": "1.0.0",
+  "description": "A scalable browser automation framework for ATS platforms using TypeScript and Playwright",
+  "main": "dist/automator.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/automator.js",
+    "serve": "npx http-server mock-ats -p 3939 --cors",
+    "dev": "ts-node src/automator.ts",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rimraf dist"
+  },
+  "keywords": [
+    "automation",
+    "ats",
+    "playwright",
+    "typescript",
+    "browser-automation",
+    "job-application"
+  ],
+  "author": "Senior Automation Engineer",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "http-server": "^14.1.1",
+    "jest": "^29.0.0",
+    "rimraf": "^5.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

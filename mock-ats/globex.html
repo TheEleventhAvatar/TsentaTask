@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Globex Corporation - Job Application</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .form-content {
+            padding: 40px;
+        }
+        
+        .accordion-section {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .accordion-section.expanded {
+            border-color: #4299e1;
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.1);
+        }
+        
+        .accordion-header {
+            background: #f7fafc;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .accordion-header:hover {
+            background: #edf2f7;
+        }
+        
+        .accordion-header h3 {
+            color: #2d3748;
+            font-size: 1.3em;
+        }
+        
+        .accordion-icon {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-section.expanded .accordion-icon {
+            transform: rotate(180deg);
+        }
+        
+        .accordion-content {
+            padding: 30px;
+            display: none;
+        }
+        
+        .accordion-section.expanded .accordion-content {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .required {
+            color: #e53e3e;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+        
+        .typeahead-container {
+            position: relative;
+        }
+        
+        .typeahead-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .result-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.2s ease;
+        }
+        
+        .result-item:hover {
+            background: #f7fafc;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #cbd5e0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: #48bb78;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(30px);
+        }
+        
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .chip-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .chip {
+            padding: 8px 16px;
+            background: #edf2f7;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .chip:hover {
+            background: #e2e8f0;
+        }
+        
+        .chip.selected {
+            background: #4299e1;
+            color: white;
+            border-color: #4299e1;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #718096;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4299e1;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #4299e1;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .file-upload {
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+        
+        .file-upload:hover {
+            border-color: #4299e1;
+            background: #ebf8ff;
+        }
+        
+        .file-upload.dragover {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+        
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);
+        }
+        
+        .error {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .validation-error {
+            border-color: #e53e3e !important;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 60px 40px;
+            display: none;
+        }
+        
+        .reference-number {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 30px 0;
+            box-shadow: 0 8px 24px rgba(72, 187, 120, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Globex Corporation</h1>
+            <p>Senior Software Engineer Application</p>
+        </div>
+        
+        <div class="form-content">
+            <!-- Personal Information Section -->
+            <div class="accordion-section" data-section="personal">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>👤 Personal Information</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <span class="error" id="firstName-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <span class="error" id="lastName-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                        <span class="error" id="email-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <span class="error" id="phone-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <input type="text" id="state" name="state">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="zipCode">ZIP Code</label>
+                        <input type="text" id="zipCode" name="zipCode">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Education Section -->
+            <div class="accordion-section" data-section="education">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>🎓 Education</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label for="school">School <span class="required">*</span></label>
+                        <div class="typeahead-container">
+                            <input type="text" id="school" name="school" placeholder="Start typing to search..." required>
+                            <div class="typeahead-results" id="school-results"></div>
+                        </div>
+                        <span class="error" id="school-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="degree">Degree <span class="required">*</span></label>
+                        <select id="degree" name="degree" required>
+                            <option value="">Select Degree</option>
+                            <option value="high-school">High School</option>
+                            <option value="associates">Associate's Degree</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="phd">PhD</option>
+                        </select>
+                        <span class="error" id="degree-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="major">Field of Study <span class="required">*</span></label>
+                        <input type="text" id="major" name="major" required>
+                        <span class="error" id="major-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="graduationYear">Graduation Year</label>
+                        <input type="number" id="graduationYear" name="graduationYear" min="1950" max="2030">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gpa">GPA</label>
+                        <input type="number" id="gpa" name="gpa" min="0" max="4" step="0.1">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Experience Section -->
+            <div class="accordion-section" data-section="experience">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>💼 Work Experience</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label for="company">Company <span class="required">*</span></label>
+                        <input type="text" id="company" name="company" required>
+                        <span class="error" id="company-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="position">Position <span class="required">*</span></label>
+                        <input type="text" id="position" name="position" required>
+                        <span class="error" id="position-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input type="text" id="startDate" name="startDate" placeholder="YYYY-MM-DD">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <input type="text" id="endDate" name="endDate" placeholder="YYYY-MM-DD">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Job Description</label>
+                        <textarea id="description" name="description" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skills Section -->
+            <div class="accordion-section" data-section="skills">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>⚡ Skills</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label>Select Your Skills <span class="required">*</span></label>
+                        <div class="chip-container" data-chips>
+                            <div class="chip" data-skill="javascript">JavaScript</div>
+                            <div class="chip" data-skill="python">Python</div>
+                            <div class="chip" data-skill="react">React</div>
+                            <div class="chip" data-skill="nodejs">Node.js</div>
+                            <div class="chip" data-skill="typescript">TypeScript</div>
+                            <div class="chip" data-skill="aws">AWS</div>
+                            <div class="chip" data-skill="docker">Docker</div>
+                            <div class="chip" data-skill="kubernetes">Kubernetes</div>
+                            <div class="chip" data-skill="mongodb">MongoDB</div>
+                            <div class="chip" data-skill="postgresql">PostgreSQL</div>
+                            <div class="chip" data-skill="java">Java</div>
+                            <div class="chip" data-skill="csharp">C#</div>
+                            <div class="chip" data-skill="go">Go</div>
+                        </div>
+                        <span class="error" id="skills-error"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Questions Section -->
+            <div class="accordion-section" data-section="questions">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>❓ Additional Questions</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label>Are you authorized to work in the US? <span class="required">*</span></label>
+                        <div class="toggle-group">
+                            <div class="toggle-switch" id="authorizedToWork" onclick="toggleSwitch(this)"></div>
+                            <span id="authorizedToWork-text">No</span>
+                        </div>
+                        <span class="error" id="authorizedToWork-error"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Will you require visa sponsorship?</label>
+                        <div class="toggle-group">
+                            <div class="toggle-switch" id="requiresVisa" onclick="toggleSwitch(this)"></div>
+                            <span id="requiresVisa-text">No</span>
+                        </div>
+                        <span class="error" id="requiresVisa-error"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Salary Section -->
+            <div class="accordion-section" data-section="salary">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>💰 Salary Expectations</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Minimum Salary</span>
+                            <span id="salary-value">$50,000</span>
+                        </div>
+                        <input type="range" id="salarySlider" name="salary" min="50000" max="200000" value="50000" step="5000">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Resume Upload Section -->
+            <div class="accordion-section" data-section="resume">
+                <div class="accordion-header" onclick="toggleSection(this)">
+                    <h3>📄 Resume Upload</h3>
+                    <span class="accordion-icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="form-group">
+                        <label>Upload Resume <span class="required">*</span></label>
+                        <div class="file-upload" id="file-upload">
+                            <p>📄 Drag and drop your resume here or click to browse</p>
+                            <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" style="display: none;">
+                        </div>
+                        <span class="error" id="resume-error"></span>
+                        <div id="file-name" style="margin-top: 10px; color: #48bb78;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Submit Section -->
+            <div class="submit-section" data-section="submit">
+                <button type="button" class="btn btn-primary" onclick="submitApplication()">Submit Application</button>
+            </div>
+            
+            <!-- Success Message -->
+            <div class="success-message" id="success-message">
+                <h2>🎉 Application Submitted Successfully!</h2>
+                <p>Thank you for applying to Globex Corporation. We have received your application and will review it shortly.</p>
+                <div class="reference-number" id="reference-number">
+                    Reference Number: GLOBEX-2024-XXXXX
+                </div>
+                <p>Please save this reference number for your records.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // School data for async typeahead
+        const schools = [
+            'Stanford University',
+            'Massachusetts Institute of Technology',
+            'Harvard University',
+            'University of California, Berkeley',
+            'Carnegie Mellon University',
+            'California Institute of Technology',
+            'Princeton University',
+            'Yale University',
+            'University of Chicago',
+            'Columbia University'
+        ];
+        
+        // Accordion functionality
+        function toggleSection(header) {
+            const section = header.parentElement;
+            const allSections = document.querySelectorAll('.accordion-section');
+            
+            // Close all other sections
+            allSections.forEach(s => {
+                if (s !== section) {
+                    s.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle current section
+            section.classList.toggle('expanded');
+        }
+        
+        // Toggle switch functionality
+        function toggleSwitch(switchElement) {
+            switchElement.classList.toggle('active');
+            const textElement = document.getElementById(switchElement.id + '-text');
+            textElement.textContent = switchElement.classList.contains('active') ? 'Yes' : 'No';
+        }
+        
+        // Chip selection functionality
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                this.classList.toggle('selected');
+            });
+        });
+        
+        // Salary slider functionality
+        const salarySlider = document.getElementById('salarySlider');
+        const salaryValue = document.getElementById('salary-value');
+        
+        salarySlider.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            salaryValue.textContent = `$${value.toLocaleString()}`;
+        });
+        
+        // Async typeahead functionality
+        const schoolInput = document.getElementById('school');
+        const schoolResults = document.getElementById('school-results');
+        
+        schoolInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase();
+            if (value.length < 2) {
+                schoolResults.style.display = 'none';
+                return;
+            }
+            
+            // Simulate network delay
+            setTimeout(() => {
+                const filtered = schools.filter(school => 
+                    school.toLowerCase().includes(value)
+                );
+                
+                // Shuffle results to simulate API behavior
+                const shuffled = filtered.sort(() => Math.random() - 0.5);
+                
+                if (shuffled.length > 0) {
+                    schoolResults.innerHTML = shuffled.map(school => 
+                        `<div class="result-item" onclick="selectSchool('${school.replace(/'/g, "\\'")}')">${school}</div>`
+                    ).join('');
+                    schoolResults.style.display = 'block';
+                } else {
+                    schoolResults.style.display = 'none';
+                }
+            }, 800); // Simulate network delay
+        });
+        
+        function selectSchool(school) {
+            schoolInput.value = school;
+            schoolResults.style.display = 'none';
+        }
+        
+        // Click outside to close suggestions
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.typeahead-container')) {
+                schoolResults.style.display = 'none';
+            }
+        });
+        
+        // File upload functionality
+        const fileUpload = document.getElementById('file-upload');
+        const fileInput = document.getElementById('resume');
+        const fileName = document.getElementById('file-name');
+        
+        fileUpload.addEventListener('click', () => fileInput.click());
+        
+        fileUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileUpload.classList.add('dragover');
+        });
+        
+        fileUpload.addEventListener('dragleave', () => {
+            fileUpload.classList.remove('dragover');
+        });
+        
+        fileUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileUpload.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+        
+        function handleFileSelect(file) {
+            fileName.textContent = `✓ ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+        }
+        
+        // Form validation and submission
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = [
+                'firstName', 'lastName', 'email', 'phone',
+                'school', 'degree', 'major',
+                'company', 'position'
+            ];
+            
+            // Clear previous errors
+            document.querySelectorAll('.error').forEach(error => {
+                error.textContent = '';
+                error.style.display = 'none';
+            });
+            
+            document.querySelectorAll('.validation-error').forEach(field => {
+                field.classList.remove('validation-error');
+            });
+            
+            // Validate required fields
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                const errorElement = document.getElementById(fieldId + '-error');
+                
+                if (!field.value.trim()) {
+                    field.classList.add('validation-error');
+                    errorElement.textContent = 'This field is required';
+                    errorElement.style.display = 'block';
+                    isValid = false;
+                }
+            });
+            
+            // Validate skills selection
+            const selectedSkills = document.querySelectorAll('.chip.selected');
+            if (selectedSkills.length === 0) {
+                document.getElementById('skills-error').textContent = 'Please select at least one skill';
+                document.getElementById('skills-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate work authorization
+            const authorizedToWork = document.getElementById('authorizedToWork').classList.contains('active');
+            if (!authorizedToWork) {
+                document.getElementById('authorizedToWork-error').textContent = 'Please answer this question';
+                document.getElementById('authorizedToWork-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate resume upload
+            const resumeFile = document.getElementById('resume').files;
+            if (!resumeFile || resumeFile.length === 0) {
+                document.getElementById('resume-error').textContent = 'Please upload your resume';
+                document.getElementById('resume-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        function submitApplication() {
+            if (!validateForm()) {
+                // Expand all sections with errors
+                document.querySelectorAll('.validation-error').forEach(field => {
+                    const section = field.closest('.accordion-section');
+                    if (section && !section.classList.contains('expanded')) {
+                        section.classList.add('expanded');
+                    }
+                });
+                
+                // Scroll to first error
+                const firstError = document.querySelector('.validation-error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth' });
+                }
+                
+                return;
+            }
+            
+            // Hide form content and show success message
+            document.querySelector('.form-content').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            
+            // Generate reference number
+            const referenceNumber = `GLOBEX-2024-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+            document.getElementById('reference-number').textContent = `Reference Number: ${referenceNumber}`;
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
