@@ -1,4 +1,4 @@
-# Tsenta Assessment - ATS Automation Framework
+# Tsenta - ATS Automation Framework
 
 A scalable browser automation framework designed to handle multiple Applicant Tracking System (ATS) platforms with different UI patterns using the same candidate data.
 
